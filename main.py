@@ -103,15 +103,13 @@ def print_result(result):
 
 
 # Example usage
-C = [3, 10]  # Coefficients of the objective function
-A = [[2, 0], [1, 2]]  # Coefficients of the constraint functions
-b = [6, 6]  # Right-hand side values
+C = [9, 10, 16]  # Coefficients of the objective function
+A = [[18, 15, 12], [6, 4, 8], [5, 3, 3]]  # Coefficients of the constraint functions
+b = [360, 192, 180]  # Right-hand side values
 
 result = simplex_method(C, A, b)
 
-# If the result is None, the method was not applicable
-if result is None:
-    print("The method is not applicable!")
-else:
-    # Print the result in the specified format
+# If the result is not None, the method is applicable, print result
+if result is not None:
     print_result(result)
+
