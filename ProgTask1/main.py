@@ -142,4 +142,12 @@ examples = [
 
 if __name__ == '__main__':
     for example in examples:
-        print(solve(example), end='\n\n')
+        result = solve(example)
+        print(result)
+        if result.state == 'unbounded':
+            print("The method is not applicable!\n")
+            continue
+        print("Decision variables: ", result.x)
+        print(f"{'Maximum' if example.type == 'max' else 'Minimum'} value: {result.z}\n")
+
+
