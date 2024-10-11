@@ -4,18 +4,18 @@ from typing import Literal, Union
 
 @dataclass
 class LPP:
-    c: list[float]  # list of coefficients of objective function
-    a: list[list[float]]  # matrix of coefficients of constraint function
-    b: list[float]  # list of right-hand side values of constraints
-    type: Literal["max", "min"]  # type of optimization problem
-    e: float = 1e-9  # approximation accuracy
+    c: list[float]  # Coefficients of the objective function
+    a: list[list[float]]  # Coefficients of the constraints
+    b: list[float]  # Right-hand side of the constraints
+    type: Literal["max", "min"]  # Type of the problem, either maximization or minimization
+    e: float = 1e-9  # Approximation accuracy
 
 
 @dataclass
 class LPPSolution:
-    state: Literal["solved", "unbounded"]
-    x: list[float]
-    z: Union[int, float]
+    state: Literal["solved", "unbounded"]  # State of the solver
+    x: list[float]  # Optimal values of the variables
+    z: Union[int, float]  # Optimal value of the objective function
 
 
 def get_min(a: list[float]) -> float:
@@ -63,6 +63,10 @@ def solve(llp: LPP) -> LPPSolution:
                 z=float('inf')
             )
 
+        print(f"{pivot_column + 1} enters, {basic_vars[pivot_row - 1] + 1} leaves")
+
+        basic_vars[pivot_row - 1] = pivot_column
+
         pivot = tableau[pivot_row][pivot_column]
         for i in range(len(tableau[pivot_row])):
             tableau[pivot_row][i] /= pivot
@@ -73,21 +77,20 @@ def solve(llp: LPP) -> LPPSolution:
             for j in range(len(tableau[i])):
                 tableau[i][j] -= factor * tableau[pivot_row][j]
 
-        basic_vars[pivot_row - 1] = pivot_column
-
-    x = [0] * num_vars
-    for i in range(num_constraints):
-        if basic_vars[i] < num_vars:
-            x[basic_vars[i]] = tableau[i + 1][-1]
+    x = [0.0] * (num_vars + num_constraints)
+    for i in range(1, len(tableau)):
+        var_index = basic_vars[i - 1]
+        x[var_index] = tableau[i][-1]
 
     return LPPSolution(
         z=tableau[0][-1] * (-1 if llp.type == "min" else 1),
-        x=x,
+        x=x[:num_vars],
         state='solved'
     )
 
 
 examples = [
+    # Example from Lab 3 Problem 1
     LPP(
         c=[9, 10, 16],
         a=[
@@ -98,32 +101,25 @@ examples = [
         b=[360, 192, 180],
         type="max"
     ),
+    # Example from Lab 3 Problem 3
     LPP(
-        c=[2, 3, 0, -1, 0, 0],
+        c=[-2, 2, -6],
         a=[
-            [2, -1, 0, -2, 1, 0],
-            [3, 2, 1, -3, 0, 0],
-            [-1, 3, 0, 4, 0, 1]
-        ],
-        b=[16, 18, 24],
-        type="max"
-    ),
-    LPP(
-        c=[-2, 2, -6, 0],
-        a=[
-            [2, 1, -2, 0],
-            [1, 2, 4, 0],
-            [1, -1, 2, 0]
+            [2, 1, -2],
+            [1, 2, 4],
+            [1, -1, 2]
         ],
         b=[24, 23, 10],
         type="min"
     ),
+    # Unbounded Example
     LPP(
         c=[2, 1],
         a=[[1, -1]],
         b=[1],
         type="max"
     ),
+    # Self-made Example
     LPP(
         c=[4, 3, 2, 1],
         a=[
@@ -133,7 +129,17 @@ examples = [
         ],
         b=[40, -10, 30],
         type="max"
-    )
+    ),
+    # Example from Test 1 Demo Problem 2
+    LPP(
+        c=[-4, -3],
+        a=[
+            [3, 2],
+            [3, 8],
+        ],
+        b=[-12, 24],
+        type="min"
+    ),
 ]
 
 if __name__ == '__main__':
