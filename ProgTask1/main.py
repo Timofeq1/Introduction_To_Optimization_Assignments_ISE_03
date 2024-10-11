@@ -63,8 +63,6 @@ def solve(llp: LPP) -> LPPSolution:
                 z=float('inf')
             )
 
-        print(f"{pivot_column + 1} enters, {basic_vars[pivot_row - 1] + 1} leaves")
-
         basic_vars[pivot_row - 1] = pivot_column
 
         pivot = tableau[pivot_row][pivot_column]
@@ -144,5 +142,4 @@ examples = [
 
 if __name__ == '__main__':
     for example in examples:
-        print(solve(example))
-        print()
+        print(solve(example), end='\n\n')
