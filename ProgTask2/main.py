@@ -8,7 +8,9 @@ class LPP:
     c: list[float]  # Coefficients of the objective function
     a: list[list[float]]  # Coefficients of the constraints
     x: list[float]  #
-    type: Literal["max", "min"]  # Type of the problem, either maximization or minimization
+    type: Literal[
+        "max", "min"
+    ]  # Type of the problem, either maximization or minimization
     e: float = 0.0001  # Approximation accuracy
 
 
@@ -62,13 +64,13 @@ class InteriorPointSolver:
                 break
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Example from Lab 6 Problem 2
     llp = LPP(
         c=[9, 10, 16, 0, 0, 0],
         a=[[18, 15, 12, 1, 0, 0], [6, 4, 8, 0, 1, 0], [5, 3, 3, 0, 0, 1]],
         x=[1, 1, 1, 315, 174, 169],
-        type="max"
+        type="max",
     )
     solver = InteriorPointSolver(llp)
     solver.solve()
@@ -76,13 +78,9 @@ if __name__ == '__main__':
     # Example from Lab 3 Problem 1
     llp = LPP(
         c=[9, 10, 16, 0, 0, 0],
-        a=[
-            [18, 15, 12, 1, 0, 0],
-            [6, 4, 8, 0, 1, 0],
-            [5, 3, 3, 0, 0, 1]
-        ],
+        a=[[18, 15, 12, 1, 0, 0], [6, 4, 8, 0, 1, 0], [5, 3, 3, 0, 0, 1]],
         x=[1, 1, 1, 315, 174, 169],
-        type="max"
+        type="max",
     )
     solver = InteriorPointSolver(llp)
     solver.solve()
@@ -90,13 +88,9 @@ if __name__ == '__main__':
     # Example from Lab 3 Problem 3
     llp = LPP(
         c=[-2, 2, -6, 0, 0, 0],
-        a=[
-            [2, 1, -2, 1, 0, 0],
-            [1, 2, 4, 0, 1, 0],
-            [1, -1, 2, 0, 0, 1]
-        ],
+        a=[[2, 1, -2, 1, 0, 0], [1, 2, 4, 0, 1, 0], [1, -1, 2, 0, 0, 1]],
         x=[1, 1, 1, 23, 11, 8],
-        type="max"
+        type="max",
     )
     solver = InteriorPointSolver(llp)
     solver.solve()
@@ -110,7 +104,7 @@ if __name__ == '__main__':
             [3, 4, 0, 1, 0, 0, 1],
         ],
         x=[1, 1, 1, 1, 36, -16, 17],
-        type="max"
+        type="max",
     )
     solver = InteriorPointSolver(llp)
     solver.solve()
@@ -123,7 +117,7 @@ if __name__ == '__main__':
             [3, 8, 0, 1],
         ],
         x=[1, 1, -17, 13],
-        type="min"
+        type="min",
     )
     solver = InteriorPointSolver(llp)
     solver.solve()

@@ -7,7 +7,9 @@ class LPP:
     c: list[float]  # Coefficients of the objective function
     a: list[list[float]]  # Coefficients of the constraints
     b: list[float]  # Right-hand side of the constraints
-    type: Literal["max", "min"]  # Type of the problem, either maximization or minimization
+    type: Literal[
+        "max", "min"
+    ]  # Type of the problem, either maximization or minimization
     e: float = 1e-9  # Approximation accuracy
 
 
@@ -57,11 +59,7 @@ def solve(llp: LPP) -> LPPSolution:
                 pivot_row = i
 
         if pivot_row is None:
-            return LPPSolution(
-                state="unbounded",
-                x=[],
-                z=float('inf')
-            )
+            return LPPSolution(state="unbounded", x=[], z=float("inf"))
 
         basic_vars[pivot_row - 1] = pivot_column
 
@@ -83,7 +81,7 @@ def solve(llp: LPP) -> LPPSolution:
     return LPPSolution(
         z=tableau[0][-1] * (-1 if llp.type == "min" else 1),
         x=x[:num_vars],
-        state='solved'
+        state="solved",
     )
 
 
@@ -91,42 +89,22 @@ examples = [
     # Example from Lab 3 Problem 1
     LPP(
         c=[9, 10, 16],
-        a=[
-            [18, 15, 12],
-            [6, 4, 8],
-            [5, 3, 3]
-        ],
+        a=[[18, 15, 12], [6, 4, 8], [5, 3, 3]],
         b=[360, 192, 180],
-        type="max"
+        type="max",
     ),
     # Example from Lab 3 Problem 3
     LPP(
-        c=[-2, 2, -6],
-        a=[
-            [2, 1, -2],
-            [1, 2, 4],
-            [1, -1, 2]
-        ],
-        b=[24, 23, 10],
-        type="min"
+        c=[-2, 2, -6], a=[[2, 1, -2], [1, 2, 4], [1, -1, 2]], b=[24, 23, 10], type="min"
     ),
     # Unbounded Example
-    LPP(
-        c=[2, 1],
-        a=[[1, -1]],
-        b=[1],
-        type="max"
-    ),
+    LPP(c=[2, 1], a=[[1, -1]], b=[1], type="max"),
     # Self-made Example
     LPP(
         c=[4, 3, 2, 1],
-        a=[
-            [1, 1, 1, 1],
-            [2, 1, 3, 0],
-            [3, 4, 0, 1]
-        ],
+        a=[[1, 1, 1, 1], [2, 1, 3, 0], [3, 4, 0, 1]],
         b=[40, -10, 30],
-        type="max"
+        type="max",
     ),
     # Example from Test 1 Demo Problem 2
     LPP(
@@ -136,18 +114,18 @@ examples = [
             [3, 8],
         ],
         b=[-12, 24],
-        type="min"
+        type="min",
     ),
 ]
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     for example in examples:
         result = solve(example)
         print(result)
-        if result.state == 'unbounded':
+        if result.state == "unbounded":
             print("The method is not applicable!\n")
             continue
         print("Decision variables: ", result.x)
-        print(f"{'Maximum' if example.type == 'max' else 'Minimum'} value: {result.z}\n")
-
-
+        print(
+            f"{'Maximum' if example.type == 'max' else 'Minimum'} value: {result.z}\n"
+        )
